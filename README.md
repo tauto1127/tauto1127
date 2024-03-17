@@ -3,6 +3,7 @@
 [![trophy](https://github-profile-trophy.vercel.app/?username=tauto1127)](https://github.com/ryo-ma/github-profile-trophy)
 ![Counter](https://profile-counter.glitch.me/tauto1127/count.svg)
 [![My Skills](https://skillicons.dev/icons?i=cs,flutter,neovim,linux)](https://skillicons.dev)
+[![Summary Card](http://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=tauto1127&theme=github)
 [![My streak](http://takutk.com:5075/StreakImg?username=tauto1127)](https://github.com/tauto1127/imageProviderForGithub)
 <!--
 **tauto1127/tauto1127** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
