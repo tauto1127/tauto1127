@@ -5,7 +5,7 @@
 ![Counter](https://profile-counter.glitch.me/tauto1127/count.svg)
 [![My Skills](https://skillicons.dev/icons?i=cs,flutter,neovim,linux)](https://skillicons.dev)
 
-[![My streak](http://takutk.com:5075/StreakImg?username=tauto1127)](https://github.com/tauto1127/imageProviderForGithub)
+[![My streak](https://api.takutk.com/StreakImg?username=tauto1127)](https://github.com/tauto1127/imageProviderForGithub)
 <!--
 **tauto1127/tauto1127** is a ✨ _special_ ✨ repository because its `README.md` (this file) appears on your GitHub profile.
 
