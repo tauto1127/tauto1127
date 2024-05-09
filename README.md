@@ -1,3 +1,6 @@
+# 自宅サーバーやりたいことリスト作ったので，よかったらみてください
+https://github.com/users/tauto1127/projects/2
+
 [![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=tauto1127)](https://github.com/anuraghazra/github-readme-stats)
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=tauto1127)](https://github.com/anuraghazra/github-readme-stats)
 
