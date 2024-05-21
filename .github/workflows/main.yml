@@ -1,7 +1,7 @@
 name: Update Card Description
 
 on:
-  project_card:
+  project_column:
     types: [created, moved]
 
 jobs:
@@ -17,30 +17,32 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         TARGET_COLUMN_NAME: "今日やった"  # 特定のカラム名をここに記載
       run: |
-        # Get the column ID where the card was moved
-        COLUMN_ID=${{ github.event.project_card.column_id }}
+        COLUMN_ID=${{ github.event.project_column.id }}
+        echo "COLUMN_ID: $COLUMN_ID"
+        # # Get the column ID where the card was moved
+        # COLUMN_ID=${{ github.event.project_card.column_id }}
 
-        # Get the project card ID
-        CARD_ID=${{ github.event.project_card.id }}
+        # # Get the project card ID
+        # CARD_ID=${{ github.event.project_card.id }}
 
-        # Fetch the column details using GitHub API
-        COLUMN_DETAILS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-          -H "Accept: application/vnd.github.inertia-preview+json" \
-          https://api.github.com/projects/columns/$COLUMN_ID)
+        # # Fetch the column details using GitHub API
+        # COLUMN_DETAILS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
+        #   -H "Accept: application/vnd.github.inertia-preview+json" \
+        #   https://api.github.com/projects/columns/$COLUMN_ID)
 
-        # Extract the column name
-        COLUMN_NAME=$(echo "$COLUMN_DETAILS" | jq -r .name)
+        # # Extract the column name
+        # COLUMN_NAME=$(echo "$COLUMN_DETAILS" | jq -r .name)
 
-        # Check if the card is in the target column
-        if [ "$COLUMN_NAME" == "$TARGET_COLUMN_NAME" ]; then
-          # Get the current date
-          DATE=$(date +'%Y-%m-%d')
+        # # Check if the card is in the target column
+        # if [ "$COLUMN_NAME" == "$TARGET_COLUMN_NAME" ]; then
+        #   # Get the current date
+        #   DATE=$(date +'%Y-%m-%d')
 
-          # Update the project card description
-          DESCRIPTION="Description updated on $DATE"
-          curl -X PATCH \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github.inertia-preview+json" \
-            https://api.github.com/projects/columns/cards/$CARD_ID \
-            -d '{"note":"'"$DESCRIPTION"'"}'
-        fi
+        #   # Update the project card description
+        #   DESCRIPTION="Description updated on $DATE"
+        #   curl -X PATCH \
+        #     -H "Authorization: token $GITHUB_TOKEN" \
+        #     -H "Accept: application/vnd.github.inertia-preview+json" \
+        #     https://api.github.com/projects/columns/cards/$CARD_ID \
+        #     -d '{"note":"'"$DESCRIPTION"'"}'
+        # fi
