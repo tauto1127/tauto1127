@@ -1,8 +1,10 @@
 name: Update Card Description
 
 on:
-  project_column:
-    types: [created, moved]
+  issues:
+    types: [opened, edited]
+  pull_request:
+    types: [opened, edited]
 
 jobs:
   update_description:
@@ -12,37 +14,90 @@ jobs:
     - name: Check out the repository
       uses: actions/checkout@v2
 
+    - name: Set up jq
+      run: sudo apt-get install jq
+
     - name: Update card description
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TARGET_COLUMN_NAME: "今日やった"  # 特定のカラム名をここに記載
+        PROJECT_NUMBER: 1  # プロジェクトの番号をここに記載
+        TARGET_COLUMN_NAME: "Target Column Name"  # 特定のカラム名をここに記載
       run: |
-        COLUMN_ID=${{ github.event.project_column.id }}
-        echo "COLUMN_ID: $COLUMN_ID"
-        # # Get the column ID where the card was moved
-        # COLUMN_ID=${{ github.event.project_card.column_id }}
+        # Get the project ID
+        PROJECT_ID=$(gh api graphql -F owner='${{ github.repository_owner }}' -F repo='${{ github.event.repository.name }}' -f query='
+          query($owner: String!, $repo: String!) {
+            repository(owner: $owner, name: $repo) {
+              projectsNext(first: 1) {
+                nodes {
+                  id
+                }
+              }
+            }
+          }
+        ' --jq '.data.repository.projectsNext.nodes[0].id')
+        echo "Project ID: $PROJECT_ID"
 
-        # # Get the project card ID
-        # CARD_ID=${{ github.event.project_card.id }}
+        # Get the project items
+        ITEMS=$(gh api graphql -F projectId=$PROJECT_ID -f query='
+          query($projectId: ID!) {
+            node(id: $projectId) {
+              ... on ProjectNext {
+                items(first: 100) {
+                  nodes {
+                    id
+                    content {
+                      ... on Issue {
+                        number
+                      }
+                      ... on PullRequest {
+                        number
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ' --jq '.data.node.items.nodes')
+        echo "Items: $ITEMS"
 
-        # # Fetch the column details using GitHub API
-        # COLUMN_DETAILS=$(curl -s -H "Authorization: token $GITHUB_TOKEN" \
-        #   -H "Accept: application/vnd.github.inertia-preview+json" \
-        #   https://api.github.com/projects/columns/$COLUMN_ID)
+        # Find the item corresponding to the issue or pull request
+        ITEM_ID=$(echo "$ITEMS" | jq -r --arg number "${{ github.event.issue.number || github.event.pull_request.number }}" '.[] | select(.content.number == ($number|tonumber)) | .id')
+        echo "Item ID: $ITEM_ID"
 
-        # # Extract the column name
-        # COLUMN_NAME=$(echo "$COLUMN_DETAILS" | jq -r .name)
+        # Get the column ID
+        COLUMN_ID=$(gh api graphql -F projectId=$PROJECT_ID -f query='
+          query($projectId: ID!) {
+            node(id: $projectId) {
+              ... on ProjectNext {
+                columns(first: 100) {
+                  nodes {
+                    id
+                    name
+                  }
+                }
+              }
+            }
+          }
+        ' --jq --arg columnName "$TARGET_COLUMN_NAME" '.data.node.columns.nodes[] | select(.name == $columnName) | .id')
+        echo "Column ID: $COLUMN_ID"
 
-        # # Check if the card is in the target column
-        # if [ "$COLUMN_NAME" == "$TARGET_COLUMN_NAME" ]; then
-        #   # Get the current date
-        #   DATE=$(date +'%Y-%m-%d')
-
-        #   # Update the project card description
-        #   DESCRIPTION="Description updated on $DATE"
-        #   curl -X PATCH \
-        #     -H "Authorization: token $GITHUB_TOKEN" \
-        #     -H "Accept: application/vnd.github.inertia-preview+json" \
-        #     https://api.github.com/projects/columns/cards/$CARD_ID \
-        #     -d '{"note":"'"$DESCRIPTION"'"}'
-        # fi
+        # Update the project item field
+        DATE=$(date +'%Y-%m-%d')
+        DESCRIPTION="Description updated on $DATE"
+        gh api graphql -F projectId=$PROJECT_ID -F itemId=$ITEM_ID -F columnId=$COLUMN_ID -F note="$DESCRIPTION" -f query='
+          mutation($projectId: ID!, $itemId: ID!, $columnId: ID!, $note: String!) {
+            updateProjectNextItemField(
+              input: {
+                projectId: $projectId
+                itemId: $itemId
+                fieldId: $columnId
+                value: $note
+              }
+            ) {
+              projectNextItem {
+                id
+              }
+            }
+          }
+        '
