@@ -15,7 +15,7 @@ jobs:
     - name: Update card description
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        TARGET_COLUMN_NAME: "Target Column Name"  # 特定のカラム名をここに記載
+        TARGET_COLUMN_NAME: "今日やった"  # 特定のカラム名をここに記載
       run: |
         # Get the column ID where the card was moved
         COLUMN_ID=${{ github.event.project_card.column_id }}
