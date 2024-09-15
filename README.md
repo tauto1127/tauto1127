@@ -1,11 +1,13 @@
 
-[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=tauto1127)](https://github.com/anuraghazra/github-readme-stats)
 [![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=tauto1127)](https://github.com/anuraghazra/github-readme-stats)
+[![GitHub Streak](https://streak-stats.demolab.com/?user=tauto1127)](https://git.io/streak-stats)
+[![Anurag's GitHub stats](https://github-readme-stats.vercel.app/api?username=tauto1127)](https://github.com/anuraghazra/github-readme-stats)
 
 [![trophy](https://github-profile-trophy.vercel.app/?username=tauto1127)](https://github.com/ryo-ma/github-profile-trophy)
 [![Summary Card](http://github-profile-summary-cards.vercel.app/api/cards/profile-details?username=tauto1127&theme=github)
 ![Counter](https://profile-counter.glitch.me/tauto1127/count.svg)
 [![My Skills](https://skillicons.dev/icons?i=cs,flutter,neovim,linux)](https://skillicons.dev)
+
 
 [![My streak](https://takutk.com:5075/StreakImg?username=tauto1127)](https://github.com/tauto1127/imageProviderForGithub)
 <!--
